@@ -86,9 +86,34 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
-  def length[A](l: List[A]): Int = ???
+  //foldRight[A,B](as: List[A], z: B)(f: (A, B) => B): B
+  def length[A](l: List[A]): Int = {
+    foldRight(l, 0)((_, len) => len + 1)
+  }
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
+    l match {
+      case Nil => z
+      case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
+    }
+  }
+
+  def sumLeft(ints: List[Int]): Int =
+    foldLeft(ints, 0)(_ + _)
+
+  def productLeft(ds: List[Double]): Double =
+    foldLeft(ds, 1.0)(_ * _)
+
+  def lengthLeft[A](l: List[A]): Int =
+    foldLeft(l, 0)((len, _) => len + 1)
+
+  def foldLeftWithRight[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+    foldRight(l, (b: B) => b)((a, g) => b => g(f(b, a)))(z)
+
+
+  //TODO Continue From Exercise 3.13
+  def foldRightWithLeft[A,B](as: List[A], z: B)(f: (A, B) => B): B = ???
+
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
